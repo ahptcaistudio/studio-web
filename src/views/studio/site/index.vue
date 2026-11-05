@@ -62,18 +62,8 @@ const config = {
       "key": "heroImageAlt",
       "label": "首屏图片说明",
       "max": 200
-    },
-    {
-      "key": "logoUrl",
-      "label": "网站图标",
-      "fileTypes": ["svg"],
-      "uploadAction": "/system/studio/images/upload-icon",
-      "max": 500,
-      "type": "image",
-      "wide": true,
-      "help": "同时用于前台左上角和浏览器标签页。仅支持 SVG，建议使用正方形纯矢量图标，留空使用默认图标。"
     }
   ],
-  "note": "维护学校、工作室名称、首屏文案和网站图标。固定配置无需新增、排序或删除。"
+  "note": "维护学校、工作室名称和首屏内容。"
 }
 </script>

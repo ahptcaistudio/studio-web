@@ -35,6 +35,8 @@ const rules = computed(() => Object.fromEntries(props.config.fields.filter(field
   .map(field => [field.key, [{ required: true, message: `${field.label}不能为空`, trigger: 'blur' }]])))
 function cleanRecord(row) {
   return { id: 1, status: props.module === 'site' ? '0' : row.status,
+    // 保存其他设置时保留历史图标引用。
+    ...(props.module === 'site' ? { logoUrl: row.logoUrl } : {}),
     ...Object.fromEntries(props.config.fields.map(field => [field.key, row[field.key] || ''])) }
 }
 async function reload() {

@@ -3,7 +3,7 @@
     <div class="studio-shell">
       <header class="masthead">
         <a class="site-identity" href="#top" aria-label="返回工作室首页" @click="closeMenu">
-          <img class="site-icon" :src="studioIconUrl" width="36" height="36" alt="" aria-hidden="true" @error="logoFailed = true">
+          <img class="site-icon" :src="studioIconUrl" width="36" height="36" alt="" aria-hidden="true">
           <span class="site-copy">
             <strong>{{ studio.site.schoolName }}</strong>
             <small>{{ studio.site.department }}</small>
@@ -335,12 +335,7 @@
 
 <script setup name="StudioFront">
 import { getPublicStudio } from '@/api/front/studio'
-
-const defaultStudioIconUrl = `${import.meta.env.BASE_URL}favicon.svg?v=2`
-const logoFailed = ref(false)
-const faviconLink = document.querySelector('link[rel="icon"]')
-const originalFavicon = faviconLink?.getAttribute('href')
-const originalFaviconType = faviconLink?.getAttribute('type')
+import studioIconUrl from '@/assets/logo/logo.png'
 
 const navItems = [
   { id: 'team', label: '团队', href: '#team' },
@@ -429,16 +424,6 @@ function createFallbackStudio() {
 }
 
 const studio = ref(createFallbackStudio())
-
-const studioIconUrl = computed(() => !logoFailed.value && resolveImageUrl(studio.value.site.logoUrl)
-  || defaultStudioIconUrl)
-
-watch(() => studio.value.site.logoUrl, () => { logoFailed.value = false })
-watch(studioIconUrl, url => {
-  if (!faviconLink) return
-  faviconLink.setAttribute('href', url)
-  faviconLink.removeAttribute('type')
-}, { immediate: true })
 
 const teamGroups = computed(() => [
   { key: 'teacher', title: '教学团队', englishTitle: 'Teaching Team' },
@@ -598,11 +583,6 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  if (faviconLink) {
-    faviconLink.setAttribute('href', originalFavicon || defaultStudioIconUrl)
-    if (originalFaviconType) faviconLink.setAttribute('type', originalFaviconType)
-    else faviconLink.removeAttribute('type')
-  }
   loadController?.abort()
   revealObserver?.disconnect()
   sectionObserver?.disconnect()
