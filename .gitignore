@@ -21,3 +21,11 @@ selenium-debug.log
 
 package-lock.json
 yarn.lock
+
+# AI agent and IDE local skills
+.agents/
+
+# Deployment secrets and generated artifacts
+/deploy/**/.env
+/deploy/**/bundle/
+/deploy/**/*.sql.gz

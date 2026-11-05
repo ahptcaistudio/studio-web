@@ -1,0 +1,37 @@
+@use "sass:color";
+
+// 工作室前台基础色板；独立 SVG 图标同步使用 primary / ink。
+$primary: #2b44c7;
+$paper: #f7f6f3;
+$ink: #1b1c20;
+$slate: #5c6066;
+$muted: #6c7078;
+$border: #dfded8;
+$surface: #e9e8e3;
+
+@mixin tokens {
+  // 语义色：组件只使用这些变量，不另定义颜色。
+  --cobalt: #{$primary};
+  --paper: #{$paper};
+  --ink: #{$ink};
+  --slate: #{$slate};
+  --mist: #{$muted};
+  --hair: #{$border};
+  --dark: var(--ink);
+  --surface: #{$surface};
+  --surface-dark: #{color.mix($paper, $ink, 6%)};
+  --accent-on-dark: #{color.mix(#fff, $primary, 60%)};
+  --paper-translucent: #{rgba($paper, 0.94)};
+  --paper-menu: #{rgba($paper, 0.98)};
+  --text-on-dark: var(--paper);
+  --text-on-dark-muted: #{rgba($paper, 0.78)};
+  --border-on-dark: #{rgba($paper, 0.18)};
+  --accent-border: #{rgba($primary, 0.35)};
+  --menu-shadow: #{rgba($ink, 0.05)};
+  // Element Plus 图片弹窗同样沿用前台主题。
+  --el-color-primary: var(--cobalt);
+  --el-text-color-primary: var(--ink);
+  --el-text-color-regular: var(--slate);
+  --el-border-color: var(--hair);
+  --el-bg-color: var(--paper);
+}

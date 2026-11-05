@@ -20,12 +20,17 @@ const isWhiteList = (path) => {
 
 router.beforeEach(async (to, from) => {
   NProgress.start()
+  // 公开展示页不依赖登录态，访客可直接访问。
+  if (to.meta?.public) {
+    NProgress.done()
+    return true
+  }
   if (getToken()) {
     to.meta.title && useSettingsStore().setTitle(to.meta.title)
     const isLock = useLockStore().isLock
     if (to.path === '/login') {
       NProgress.done()
-      return { path: '/' }
+      return { path: '/admin' }
     }
     if (isWhiteList(to.path)) {
       return true

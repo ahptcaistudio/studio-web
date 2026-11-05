@@ -48,22 +48,28 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: "/:pathMatch(.*)*",
-    component: () => import('@/views/error/404'),
-    hidden: true
-  },
-  {
     path: '/401',
     component: () => import('@/views/error/401'),
     hidden: true
   },
   {
-    path: '',
+    path: '/',
+    component: () => import('@/views/front/index'),
+    hidden: true,
+    meta: { title: '人工智能工作室', public: true }
+  },
+  {
+    path: '/index',
+    redirect: '/admin',
+    hidden: true,
+    meta: { public: true }
+  },
+  {
+    path: '/admin',
     component: Layout,
-    redirect: '/index',
     children: [
       {
-        path: '/index',
+        path: '',
         component: () => import('@/views/index'),
         name: 'Index',
         meta: { title: '首页', icon: 'dashboard', affix: true }
@@ -89,6 +95,13 @@ export const constantRoutes = [
         meta: { title: '个人中心', icon: 'user' }
       }
     ]
+  },
+  {
+    // 放在固定路由之后，避免刷新动态后台页面时提前命中 404。
+    // 该路由不能标记为 public，否则路由守卫会跳过登录和动态菜单初始化。
+    path: '/:pathMatch(.*)*',
+    component: () => import('@/views/error/404'),
+    hidden: true
   }
 ]
 

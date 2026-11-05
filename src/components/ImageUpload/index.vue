@@ -20,6 +20,7 @@
       :class="{ hide: fileList.length >= limit }"
     >
       <el-icon class="avatar-uploader-icon"><plus /></el-icon>
+      <span class="upload-accessible-label">{{ uploadLabel }}</span>
     </el-upload>
     <!-- 上传提示 -->
     <div class="el-upload__tip" v-if="showTip && !disabled">
@@ -53,6 +54,7 @@ import { isExternal } from "@/utils/validate"
 import Sortable from 'sortablejs'
 
 const props = defineProps({
+  uploadLabel: { type: String, default: "上传图片" },
   modelValue: [String, Object, Array],
   // 上传接口地址
   action: {
@@ -163,6 +165,7 @@ function handleBeforeUpload(file) {
   }
   proxy.$modal.loading("正在上传图片，请稍候...")
   number.value++
+  emit('upload-start')
 }
 
 // 文件个数超出
@@ -172,9 +175,11 @@ function handleExceed() {
 
 // 上传成功回调
 function handleUploadSuccess(res, file) {
+  emit('upload-end')
   if (res.code === 200) {
     uploadList.value.push({ name: res.fileName, url: res.fileName })
     uploadedSuccessfully()
+    emit('uploaded', res.fileName)
   } else {
     number.value--
     proxy.$modal.closeLoading()
@@ -190,6 +195,7 @@ function handleDelete(file) {
   if (findex > -1 && uploadList.value.length === number.value) {
     fileList.value.splice(findex, 1)
     emit("update:modelValue", listToString(fileList.value))
+    emit('removed', file.url.replace(baseUrl, ''))
     return false
   }
 }
@@ -207,6 +213,8 @@ function uploadedSuccessfully() {
 
 // 上传失败
 function handleUploadError() {
+  number.value = Math.max(0, number.value - 1)
+  emit('upload-end')
   proxy.$modal.msgError("上传图片失败")
   proxy.$modal.closeLoading()
 }
@@ -247,6 +255,17 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+.upload-accessible-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 // .el-upload--picture-card 控制加号部分
 :deep(.hide .el-upload--picture-card) {
     display: none;
