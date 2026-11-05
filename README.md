@@ -13,7 +13,7 @@ npm ci
 npm run dev
 ```
 
-- 官网默认地址为 `http://localhost`，管理后台入口为 `/admin`，登录页为 `/login`。
+- 官网默认地址为 `http://localhost`，管理入口为 `/login`，登录后默认进入 `/studio/site`（基础设置）。没有该菜单权限的账号进入个人中心。
 - Vite 将 `/dev-api` 请求转发到 `http://localhost:11236`。后端地址不同时，在 `.env.development.local` 中设置 `VITE_DEV_BACKEND_URL` 后重启 Vite。
 
 ## 构建与部署

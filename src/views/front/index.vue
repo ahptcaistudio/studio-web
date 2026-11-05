@@ -30,7 +30,7 @@
             :aria-current="activeSection === item.id ? 'location' : undefined"
             @click="closeMenu"
           >{{ item.label }}</a>
-          <a class="nav-admin" href="/admin" @click="closeMenu">管理入口 <span aria-hidden="true">↗</span></a>
+          <a class="nav-admin" href="/login" @click="closeMenu">管理入口 <span aria-hidden="true">↗</span></a>
         </nav>
       </header>
 

@@ -128,7 +128,7 @@ function handleLogin() {
           }
           return acc
         }, {})
-        router.push({ path: redirect.value || "/admin", query: otherQueryParams })
+        router.push({ path: redirect.value || "/studio/site", query: otherQueryParams })
       }).catch(() => {
         loading.value = false
         // 重新获取验证码

@@ -1,7 +1,7 @@
 <template>
   <div :class="['sidebar-theme-wrapper', {'has-logo':showLogo}, sideTheme]" class="sidebar-container">
     <logo v-if="showLogo" :collapse="isCollapse" />
-    <el-scrollbar wrap-class="scrollbar-wrapper">
+    <el-scrollbar wrap-class="scrollbar-wrapper" view-class="sidebar-menu-view">
       <el-menu
         :default-active="activeMenu"
         :collapse="isCollapse"
@@ -19,12 +19,19 @@
           :item="route"
           :base-path="route.path"
         />
+        <router-link class="return-home" to="/">
+          <el-menu-item index="/" class="submenu-title-noDropdown">
+            <House class="svg-icon" aria-hidden="true" />
+            <template #title><span class="menu-title">返回主页</span></template>
+          </el-menu-item>
+        </router-link>
       </el-menu>
     </el-scrollbar>
   </div>
 </template>
 
 <script setup>
+import { House } from '@element-plus/icons-vue'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
 import variables from '@/assets/styles/variables.module.scss'
@@ -71,12 +78,19 @@ const activeMenu = computed(() => {
 <style lang="scss" scoped>
 .sidebar-container {
   background-color: v-bind(getMenuBackground);
+
+  :deep(.sidebar-menu-view) {
+    display: flex;
+    min-height: 100%;
+  }
   
   .scrollbar-wrapper {
     background-color: v-bind(getMenuBackground);
   }
 
   .el-menu {
+    display: flex;
+    flex-direction: column;
     border: none;
     height: 100%;
     width: 100% !important;
@@ -99,6 +113,10 @@ const activeMenu = computed(() => {
     .el-sub-menu__title {
       color: v-bind(getMenuTextColor);
     }
+  }
+
+  .return-home {
+    margin-top: auto;
   }
 }
 </style>

@@ -84,7 +84,7 @@ const handleUnlock = async () => {
     await unlockScreen(password.value)
     const lockPath = lockStore.lockPath
     lockStore.unlockScreen()
-    router.replace(lockPath)
+    router.replace(lockPath === '/admin' ? lockStore.lockPath : lockPath)
   } catch (err) {
     const msg = err.message || err.toString()
     showError(msg)

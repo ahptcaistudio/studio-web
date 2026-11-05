@@ -30,7 +30,7 @@ router.beforeEach(async (to, from) => {
     const isLock = useLockStore().isLock
     if (to.path === '/login') {
       NProgress.done()
-      return { path: '/admin' }
+      return { path: '/studio/site' }
     }
     if (isWhiteList(to.path)) {
       return true
@@ -63,6 +63,9 @@ router.beforeEach(async (to, from) => {
         ElMessage.error(err)
         return { path: '/' }
       }
+    }
+    if (to.path === '/studio/site' && !to.matched.some(record => record.path === '/studio/site')) {
+      return { path: '/user/profile', replace: true }
     }
     return true
   } else {

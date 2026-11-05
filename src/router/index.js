@@ -60,21 +60,9 @@ export const constantRoutes = [
   },
   {
     path: '/index',
-    redirect: '/admin',
+    redirect: '/',
     hidden: true,
     meta: { public: true }
-  },
-  {
-    path: '/admin',
-    component: Layout,
-    children: [
-      {
-        path: '',
-        component: () => import('@/views/index'),
-        name: 'Index',
-        meta: { title: '首页', icon: 'dashboard', affix: true }
-      }
-    ]
   },
   {
     path: '/lock',
