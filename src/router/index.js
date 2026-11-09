@@ -56,7 +56,7 @@ export const constantRoutes = [
     path: '/',
     component: () => import('@/views/front/index'),
     hidden: true,
-    meta: { title: '人工智能工作室', public: true }
+    meta: { title: '人工智能AI工作室', public: true }
   },
   {
     path: '/index',

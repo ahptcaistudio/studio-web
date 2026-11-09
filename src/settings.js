@@ -1,8 +1,11 @@
+const currentYear = new Date().getFullYear()
+const copyrightYears = currentYear > 2025 ? `2025 - ${currentYear}` : '2025'
+
 export default {
   /**
    * 网页标题
    */
-  title: import.meta.env.VITE_APP_TITLE,
+  title: import.meta.env.VITE_APP_TITLE || '人工智能AI工作室',
 
   /**
    * 侧边栏主题 深色主题theme-dark，浅色主题theme-light
@@ -62,6 +65,6 @@ export default {
   /**
    * 底部版权文本内容
    */
-  footerContent: 'Copyright © 2018-2026 RuoYi. All Rights Reserved.'
+  footerContent: `© ${copyrightYears} 安徽邮电职业技术学院 · 人工智能AI工作室`
 }
 

@@ -274,7 +274,7 @@
       </main>
 
       <footer class="footer">
-        <p>© {{ currentYear }} {{ studio.site.schoolName }} · {{ studio.site.department }}</p>
+        <p>© {{ copyrightYears }} {{ studio.site.schoolName }} · {{ studio.site.department }}</p>
         <a href="#top" aria-label="返回顶部">{{ studio.site.englishName }} <span aria-hidden="true">↑</span></a>
       </footer>
     </div>
@@ -325,6 +325,7 @@ const heroImagePlaceholder = computed(() => loadState.value === 'loading' ? '图
   : loadState.value === 'error' ? '图片暂时无法加载' : missingImageLabel('hero', '首屏图片待补充'))
 let loadController
 const currentYear = new Date().getFullYear()
+const copyrightYears = computed(() => currentYear > 2025 ? `2025 - ${currentYear}` : '2025')
 let revealObserver
 let sectionObserver
 
@@ -332,7 +333,7 @@ function createFallbackStudio() {
   return {
     site: {
       schoolName: '安徽邮电职业技术学院',
-      department: '人工智能工作室',
+      department: '人工智能AI工作室',
       englishName: 'AI INNOVATION STUDIO'
     },
     hero: {
@@ -359,6 +360,16 @@ function createFallbackStudio() {
 }
 
 const studio = ref(createFallbackStudio())
+
+const pageTitle = computed(() => {
+  return studio.value?.site?.department || '人工智能AI工作室'
+})
+
+watch(pageTitle, (title) => {
+  if (title) {
+    document.title = title
+  }
+}, { immediate: true })
 
 const teamGroups = computed(() => [
   { key: 'teacher', title: '教学团队', englishTitle: 'Teaching Team' },
