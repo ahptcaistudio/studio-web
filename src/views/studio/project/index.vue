@@ -1,65 +1,24 @@
-<template><StudioSettings module="project" :config="config" /></template>
+<template><StudioRecords module="project" :config="config" /></template>
 <script setup name="StudioProject">
-import StudioSettings from '../shared/StudioSettings.vue'
+import StudioRecords from '../shared/StudioRecords.vue'
+
 const config = {
-  "label": "企业项目",
-  "fields": [
-    {
-      "key": "title",
-      "label": "项目标题",
-      "max": 200,
-      "required": true
-    },
-    {
-      "key": "englishName",
-      "label": "项目英文名称",
-      "max": 200
-    },
-    {
-      "key": "label",
-      "label": "项目标签",
-      "max": 100
-    },
-    {
-      "key": "description",
-      "label": "项目介绍与合作理念",
-      "max": 2000,
-      "type": "textarea",
-      "wide": true
-    },
-    {
-      "key": "detailOneLabel",
-      "label": "详情一标签",
-      "max": 50
-    },
-    {
-      "key": "detailOneValue",
-      "label": "详情一内容",
-      "max": 200
-    },
-    {
-      "key": "detailTwoLabel",
-      "label": "详情二标签",
-      "max": 50
-    },
-    {
-      "key": "detailTwoValue",
-      "label": "详情二内容",
-      "max": 200
-    },
-    {
-      "key": "imageUrl",
-      "label": "项目图片",
-      "max": 500,
-      "type": "image",
-      "wide": true
-    },
-    {
-      "key": "imageAlt",
-      "label": "项目图片说明",
-      "max": 200
-    }
+  label: '企业合作资讯',
+  nameKey: 'title',
+  nameLabel: '资讯标题',
+  fields: [
+    { key: 'title', label: '资讯标题', max: 200, required: true },
+    { key: 'partner', label: '合作单位', max: 200 },
+    { key: 'dateLabel', label: '发布日期', max: 50, help: '建议使用 YYYY-MM-DD，例如 2026-11-09。' },
+    { key: 'label', label: '资讯分类', max: 100 },
+    { key: 'description', label: '资讯正文', max: 2000, type: 'textarea', wide: true, help: '前台列表自动截取开头作为摘要，点击标题可查看完整正文。' },
+    { key: 'imageUrl', label: '资讯配图', type: 'image', wide: true },
+    { key: 'imageAlt', label: '图片说明', max: 200 }
   ],
-  "note": "独立维护企业级 AI 项目介绍与合作理念，可整体显示或隐藏。不与首屏共用内容。"
+  columns: [
+    { key: 'partner', label: '合作单位' },
+    { key: 'dateLabel', label: '发布日期' },
+    { key: 'label', label: '资讯分类' }
+  ]
 }
 </script>

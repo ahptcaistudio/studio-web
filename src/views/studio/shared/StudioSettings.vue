@@ -7,11 +7,6 @@
       <StudioFields :model="form" :fields="config.fields" :disabled="loading || draft.busy.value || !canEdit"
         @uploaded="draft.track" @removed="draft.removed" @upload-start="draft.pending.value++"
         @upload-end="draft.pending.value = Math.max(0, draft.pending.value - 1)" />
-      <el-form-item v-if="module === 'project'" label="整体展示状态">
-        <el-switch v-model="form.status" active-value="0" inactive-value="1" active-text="显示" inactive-text="隐藏"
-          :disabled="draft.busy.value || !canEdit" />
-        <p class="settings-note">隐藏会移除整个企业项目板块及图片占位，不影响首屏和平台设施。</p>
-      </el-form-item>
       <el-button type="primary" :loading="draft.saving.value" :disabled="loading || draft.pending.value > 0 || !canEdit" @click="save">保存设置</el-button>
       <el-button :disabled="draft.busy.value" @click="reload">重新加载</el-button>
     </el-form>

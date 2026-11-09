@@ -37,7 +37,7 @@
       <main id="top">
         <div v-if="loadState !== 'ready'" class="load-notice" :class="{ 'load-notice-error': loadState === 'error' }"
           role="status" aria-live="polite">
-          <span>{{ loadState === 'loading' ? '正在加载工作室内容…' : '未能获取工作室最新内容，团队成员、竞赛记录、教研成果、企业项目和平台设施暂时无法展示。请检查网络连接，点击“重新加载”再试一次；如果仍无法加载，请稍后重试或联系网站管理员。' }}</span>
+          <span>{{ loadState === 'loading' ? '正在加载工作室内容…' : '未能获取工作室最新内容，团队成员、竞赛记录、教研成果、企业合作暂时无法展示。请检查网络连接，点击“重新加载”再试一次；如果仍无法加载，请稍后重试或联系网站管理员。' }}</span>
           <button v-if="loadState === 'error'" type="button" @click="loadStudio">重新加载</button>
         </div>
         <section class="hero reveal" aria-labelledby="hero-title">
@@ -242,77 +242,29 @@
           <header class="section-head">
             <div class="section-title">
               <span class="section-square" aria-hidden="true"></span>
-              <h2 id="project-title">企业项目与平台</h2>
+              <h2 id="project-title">企业合作</h2>
             </div>
-            <span class="section-en">Enterprise Projects &amp; Platforms</span>
+            <span class="section-en">Partnership News</span>
           </header>
-
-          <article v-if="studio.project.visible" class="project-band" :class="{ 'without-media': !mediaUrl('project') }">
-            <div class="project-band-copy">
-              <span class="band-accent" aria-hidden="true"></span>
-              <p class="band-label">{{ studio.project.label }}</p>
-              <h3>{{ studio.project.title }}<small>{{ studio.project.englishTitle }}</small></h3>
-              <p class="band-description">{{ studio.project.description }}</p>
-              <dl v-if="studio.project.details.length" class="band-details">
-                <div v-for="detail in studio.project.details" :key="detail.label">
-                  <dt>{{ detail.label }}</dt>
-                  <dd>{{ detail.value || '待补充' }}</dd>
+          <ul v-if="studio.projects.length" class="partnership-list">
+            <li v-for="project in studio.projects" :key="project.id">
+              <article class="partnership-card">
+                <p class="partnership-date">{{ project.date || '日期待补充' }}</p>
+                <div class="partnership-copy">
+                  <p v-if="project.type" class="partnership-type">{{ project.type }}</p>
+                  <h3>
+                    <button type="button" class="partnership-title-button" aria-haspopup="dialog"
+                      @click="openPartnership(project, $event)">{{ project.title }}</button>
+                  </h3>
+                  <p v-if="project.partner" class="partnership-partner">合作单位：{{ project.partner }}</p>
+                  <p class="partnership-summary">{{ partnershipSummary(project.description) }}</p>
                 </div>
-              </dl>
-            </div>
-            <figure v-if="mediaUrl('project')" class="media-figure project-figure">
-              <button type="button" class="media-frame media-frame-portrait media-preview-trigger" :aria-label="`查看大图：${mediaAlt('project', '企业项目展示图')}`" @click="openMediaPreview('project')">
-                <img
-                  :src="mediaUrl('project')"
-                  :alt="mediaAlt('project', '企业级 AI 项目展示图')"
-                  loading="lazy" decoding="async"
-                  @error="markMediaError('project')"
-                />
-              </button>
-              <figcaption class="media-caption">
-                <span>{{ mediaTitle('project', '企业项目 · Enterprise Projects') }}</span>
-              </figcaption>
-            </figure>
-            <figure v-else class="media-figure project-figure">
-              <div class="media-frame media-frame-portrait media-empty-frame" role="img" :aria-label="missingImageLabel('project', '企业项目图片待补充')">
-                <span>{{ missingImageLabel('project', '企业项目图片待补充') }}</span>
-              </div>
-              <figcaption class="media-caption">
-                <span>{{ mediaTitle('project', '企业项目 · Enterprise Projects') }}</span>
-              </figcaption>
-            </figure>
-          </article>
-
-          <div v-if="studio.platforms.length" class="platform-grid">
-            <article v-for="(platform, index) in studio.platforms" :key="platform.id || platform.title" class="platform-card">
-              <figure v-if="mediaUrl(platform.mediaKey || `platform-${index}`)" class="media-figure">
-                <button type="button" class="media-frame media-frame-platform media-preview-trigger" :aria-label="`查看${platform.title}大图`" @click="openMediaPreview(platform.mediaKey || `platform-${index}`)">
-                  <img
-                    :src="mediaUrl(platform.mediaKey || `platform-${index}`)"
-                    :alt="mediaAlt(platform.mediaKey || `platform-${index}`, `${platform.title}展示图`)"
-                    loading="lazy" decoding="async"
-                    @error="markMediaError(platform.mediaKey || `platform-${index}`)"
-                  />
-                </button>
-                <figcaption class="media-caption">
-                  <span>{{ platform.imageTitle || platform.title }}</span>
-                </figcaption>
-              </figure>
-              <figure v-else class="media-figure">
-                <div class="media-frame media-frame-platform media-empty-frame" role="img" :aria-label="missingImageLabel(platform.mediaKey || `platform-${index}`, '图片待补充')">
-                  <span>{{ missingImageLabel(platform.mediaKey || `platform-${index}`, '图片待补充') }}</span>
-                </div>
-                <figcaption class="media-caption">
-                  <span>{{ platform.imageTitle || platform.title }}</span>
-                </figcaption>
-              </figure>
-              <p class="platform-label">{{ platform.label || '开放平台' }}</p>
-              <h3>{{ platform.title }}</h3>
-              <p>{{ platform.description || '平台介绍待补充。' }}</p>
-              <div v-if="platform.details?.length" class="platform-details">
-                <span v-for="detail in platform.details" :key="detail.label"><b>{{ detail.label }}</b>{{ detail.value || '待补充' }}</span>
-              </div>
-            </article>
+              </article>
+            </li>
+          </ul>
+          <div v-else class="empty-note">
+            <span class="empty-note-mark" aria-hidden="true">合</span>
+            <div><strong>暂无企业合作资讯</strong><p>合作动态将在后台发布后展示。</p></div>
           </div>
         </section>
         </template>
@@ -326,6 +278,19 @@
         <a href="#top" aria-label="返回顶部">{{ studio.site.englishName }} <span aria-hidden="true">↑</span></a>
       </footer>
     </div>
+    <el-dialog v-model="partnershipOpen" :title="activePartnership?.title || '企业合作资讯'"
+      width="min(92vw, 760px)" append-to-body destroy-on-close @closed="closePartnership">
+      <article v-if="activePartnership" class="partnership-article">
+        <p v-if="activePartnership.date || activePartnership.type" class="partnership-article-meta">
+          {{ [activePartnership.date, activePartnership.type].filter(Boolean).join(' · ') }}
+        </p>
+        <p v-if="activePartnership.partner" class="partnership-article-meta">合作单位：{{ activePartnership.partner }}</p>
+        <img v-if="mediaUrl(activePartnership.mediaKey)" class="partnership-article-image"
+          :src="mediaUrl(activePartnership.mediaKey)" :alt="mediaAlt(activePartnership.mediaKey, activePartnership.title)"
+          decoding="async" @error="markMediaError(activePartnership.mediaKey)" />
+        <p class="partnership-article-body">{{ activePartnership.description || '正文待补充。' }}</p>
+      </article>
+    </el-dialog>
     <el-dialog v-model="previewOpen" :title="previewAlt" width="min(92vw, 1100px)" append-to-body destroy-on-close class="studio-image-dialog">
       <p v-if="previewError" role="status">图片暂时无法加载，请关闭后重试。</p>
       <img v-else :src="previewUrl" :alt="previewAlt" class="studio-preview-image" decoding="async" @error="previewError = true" />
@@ -341,7 +306,7 @@ const navItems = [
   { id: 'team', label: '团队', href: '#team' },
   { id: 'comp', label: '竞赛', href: '#comp' },
   { id: 'award', label: '教研', href: '#award' },
-  { id: 'project', label: '项目与平台', href: '#project' }
+  { id: 'project', label: '企业合作', href: '#project' }
 ]
 
 const pageRef = ref(null)
@@ -353,6 +318,9 @@ const previewOpen = ref(false)
 const previewUrl = ref('')
 const previewAlt = ref('图片预览')
 const previewError = ref(false)
+const partnershipOpen = ref(false)
+const activePartnership = ref(null)
+let partnershipTrigger
 const heroImagePlaceholder = computed(() => loadState.value === 'loading' ? '图片加载中…'
   : loadState.value === 'error' ? '图片暂时无法加载' : missingImageLabel('hero', '首屏图片待补充'))
 let loadController
@@ -385,40 +353,7 @@ function createFallbackStudio() {
     team: [],
     competitions: [],
     awards: [],
-    project: {
-      visible: false,
-      label: '企业级 AI 项目 · Enterprise AI',
-      title: '企业级 AI 项目',
-      englishTitle: 'Enterprise AI Projects',
-      description: '以「真问题驱动、真代码交付」为核心理念，面向企业真实业务场景承接企业级 AI 项目，围绕需求分析、方案设计、工程实现与部署交付开展合作。',
-      details: []
-    },
-    platforms: [
-      {
-        id: 'practice',
-        label: '专业实践平台',
-        title: 'AI 实验与实践平台',
-        description: '围绕人工智能课程实践、项目训练和创新活动建设的开放平台，具体设施与开放信息待后台发布。',
-        details: [
-          { label: '位置', value: '待补充' },
-          { label: '开放', value: '待补充' }
-        ],
-        mediaKey: 'platform-0',
-        imageTitle: '实践平台 · Practice'
-      },
-      {
-        id: 'partner',
-        label: '合作平台',
-        title: '校企协同基地',
-        description: '连接学校、教师、学生与行业实践的协同空间，合作单位与项目内容待后台发布。',
-        details: [
-          { label: '合作单位', value: '待补充' },
-          { label: '联合项目', value: '待补充' }
-        ],
-        mediaKey: 'platform-1',
-        imageTitle: '协同基地 · Partner'
-      }
-    ],
+    projects: [],
     media: {}
   }
 }
@@ -444,12 +379,7 @@ function normalizeStudio(payload = {}) {
     team: normalizeTeam(payload.team),
     competitions: Array.isArray(payload.competitions) ? payload.competitions : fallback.competitions,
     awards: Array.isArray(payload.awards) ? payload.awards : fallback.awards,
-    project: {
-      ...fallback.project,
-      ...(payload.project || {}),
-      details: Array.isArray(payload.project?.details) ? payload.project.details : fallback.project.details
-    },
-    platforms: Array.isArray(payload.platforms) ? payload.platforms : fallback.platforms,
+    projects: Array.isArray(payload.projects) ? payload.projects : fallback.projects,
     media: payload.media || fallback.media
   }
 }
@@ -482,6 +412,25 @@ async function loadStudio() {
   } catch {
     if (!controller.signal.aborted) loadState.value = 'error'
   }
+}
+
+function partnershipSummary(description) {
+  const text = (description || '').trim().replace(/\s+/g, ' ')
+  if (!text) return '暂无摘要。'
+  const characters = Array.from(text)
+  return characters.length > 100 ? characters.slice(0, 100).join('') + '…' : text
+}
+
+function openPartnership(project, event) {
+  partnershipTrigger = event.currentTarget
+  activePartnership.value = project
+  partnershipOpen.value = true
+}
+
+function closePartnership() {
+  activePartnership.value = null
+  if (partnershipTrigger?.isConnected) partnershipTrigger.focus({ preventScroll: true })
+  partnershipTrigger = null
 }
 
 function openPreview(url, alt) {
@@ -1878,6 +1827,93 @@ main {
 
   .reveal {
     opacity: 1;
+  }
+}
+.partnership-list {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.partnership-card {
+  display: grid;
+  grid-template-columns: minmax(110px, 0.2fr) minmax(0, 1fr);
+  gap: 24px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--hair);
+  overflow-wrap: anywhere;
+}
+
+.partnership-date,
+.partnership-type {
+  margin: 0;
+  color: var(--cobalt);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.partnership-copy h3 {
+  margin: 0;
+  font-size: clamp(18px, 2vw, 22px);
+}
+
+.partnership-title-button {
+  display: inline-block;
+  min-height: 44px;
+  padding: 4px 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.partnership-title-button:hover {
+  color: var(--cobalt);
+  text-decoration: underline;
+}
+
+.partnership-partner,
+.partnership-summary {
+  margin: 6px 0 0;
+  color: var(--slate);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.partnership-article {
+  max-height: 65vh;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+}
+
+.partnership-article-meta {
+  margin: 0 0 10px;
+  color: var(--el-text-color-secondary);
+}
+
+.partnership-article-image {
+  display: block;
+  max-width: 100%;
+  max-height: 45vh;
+  margin: 16px auto;
+  object-fit: contain;
+}
+
+.partnership-article-body {
+  margin: 16px 0 0;
+  color: var(--el-text-color-primary);
+  font-size: 15px;
+  line-height: 1.9;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 760px) {
+  .partnership-card {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
   }
 }
 </style>

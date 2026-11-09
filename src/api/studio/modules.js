@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-const modules = new Set(['site', 'project', 'team', 'competition', 'award', 'platform'])
+const modules = new Set(['site', 'project', 'team', 'competition', 'award'])
 function endpoint(module) {
   if (!modules.has(module)) throw new Error('不支持的工作室模块')
   return `/system/studio/${module}`
