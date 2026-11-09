@@ -58,6 +58,10 @@ const usePermissionStore = defineStore(
 // 遍历后台传来的路由字符串，转换为组件对象
 function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false) {
   return asyncRouterMap.filter(route => {
+    // 过滤通知公告模块
+    if (route.path === 'notice' || route.path === '/system/notice' || route.component === 'system/notice/index') {
+      return false
+    }
     if (type && route.children) {
       route.children = filterChildren(route.children)
     }
