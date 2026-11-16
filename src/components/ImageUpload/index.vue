@@ -195,7 +195,7 @@ function handleDelete(file) {
   if (findex > -1 && uploadList.value.length === number.value) {
     fileList.value.splice(findex, 1)
     emit("update:modelValue", listToString(fileList.value))
-    emit('removed', file.url.replace(baseUrl, ''))
+    emit('removed', isExternal(file.url) ? file.url : file.url.replace(baseUrl, ''))
     return false
   }
 }
@@ -231,7 +231,7 @@ function listToString(list, separator) {
   separator = separator || ","
   for (let i in list) {
     if (undefined !== list[i].url && list[i].url.indexOf("blob:") !== 0) {
-      strs += list[i].url.replace(baseUrl, "") + separator
+      strs += (isExternal(list[i].url) ? list[i].url : list[i].url.replace(baseUrl, "")) + separator
     }
   }
   return strs != "" ? strs.substr(0, strs.length - 1) : ""

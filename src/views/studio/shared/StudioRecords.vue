@@ -23,7 +23,7 @@
     <el-dialog v-model="open" :title="`${form.id ? '修改' : '新增'}${config.label}`" width="min(900px, 94vw)" append-to-body destroy-on-close
       :close-on-click-modal="false" :close-on-press-escape="!draft.busy.value" :show-close="!draft.busy.value" @close="draft.discard">
       <el-form ref="formRef" :model="form" :rules="rules" label-position="top">
-        <StudioFields :model="form" :fields="config.fields" :disabled="draft.busy.value || !canWrite" @uploaded="draft.track" @removed="draft.removed"
+        <StudioFields :model="form" :fields="config.fields" :module="module" :disabled="draft.busy.value || !canWrite" @uploaded="draft.track" @removed="draft.removed"
           @upload-start="draft.pending.value++" @upload-end="draft.pending.value = Math.max(0, draft.pending.value - 1)" />
         <el-row :gutter="20"><el-col :xs="24" :sm="12"><el-form-item label="排序"><el-input-number v-model="form.sortNum" :min="0" :max="9999" :disabled="draft.busy.value" /></el-form-item></el-col>
           <el-col :xs="24" :sm="12"><el-form-item label="展示状态"><el-radio-group v-model="form.status" :disabled="draft.busy.value"><el-radio value="0">显示</el-radio><el-radio value="1">隐藏</el-radio></el-radio-group></el-form-item></el-col></el-row>

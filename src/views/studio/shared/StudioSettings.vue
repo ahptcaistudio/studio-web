@@ -4,7 +4,7 @@
     <p class="settings-note">{{ config.note }}</p>
     <el-alert v-if="loadError" title="配置加载失败，请重试。为避免覆盖数据，暂不能保存。" type="error" :closable="false" />
     <el-form v-else ref="formRef" :model="form" :rules="rules" label-position="top">
-      <StudioFields :model="form" :fields="config.fields" :disabled="loading || draft.busy.value || !canEdit"
+      <StudioFields :model="form" :fields="config.fields" :module="'site'" :disabled="loading || draft.busy.value || !canEdit"
         @uploaded="draft.track" @removed="draft.removed" @upload-start="draft.pending.value++"
         @upload-end="draft.pending.value = Math.max(0, draft.pending.value - 1)" />
       <el-button type="primary" :loading="draft.saving.value" :disabled="loading || draft.pending.value > 0 || !canEdit" @click="save">保存设置</el-button>
